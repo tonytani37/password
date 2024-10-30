@@ -2,6 +2,7 @@
 
 javascriptで作ってみた
 
+~~~
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -87,3 +88,4 @@ javascriptで作ってみた
     </script>
 </body>
 </html>
+~~~
