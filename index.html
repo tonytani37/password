@@ -3,53 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>パスワード生成器</title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <title>パスワードがつくれるよ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
+        .custom-container {
+            max-width: 800px; 
+            margin: 0 auto; /* 中央揃え */
         }
-        .container {
-            text-align: center;
-        }
-        .history {
-            margin-top: 20px;
-            max-width: 800px;
-            /* word-wrap: break-word; */
-        }
-        .copy-message {
-            color: green;
-            margin-top: 10px;
+        .custom-jumbotron {
+            background-color: #092038; /* 希望する背景色を指定 */
+            color : #ffff;
+            max-width: 800px; 
+            margin: 0 auto; /* 中央揃え */
         }
         .password-item {
-            cursor: pointer;
-            color: blue;
+            cursor: pointer; /* パスワードをクリックするときのカーソル形状（指差し） */
+            color: rgb(42, 56, 180); /* パスワードの色 */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>パスワード生成器</h1>
-        <label for="length">パスワードの長さ (8-20):</label>
-        <input type="number" id="length" name="length" min="8" max="20" value="12">
-        <button onclick="generatePassword()">生成</button>
-        <p id="password" onclick="copyPassword(this)" class="password-item"></p>
-        <p id="copy-message" class="copy-message"></p>
-        <div class="history">
-            <h2>生成履歴（上から新しい順です）</h2>
-            <ul id="history"></ul>
+    <div class="jumbotron custom-jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-5">パスワードをつくる</h1>
+          <p class="lead">
+            [つくる]ボタンをクリックするとパスワードがつくられます
+          <br>
+            パスワードにカーソルをあわせてクリックするとコピーできます
+        </p>
         </div>
     </div>
+    <div class="container-sm custom-container">
+        <label for="length">パスワードの長さ指定 (8-20)</label>
+        <input type="number" id="length" name="length" min="8" max="20" value="12">
+        <button onclick="generatePassword()"  class="btn btn-primary">つくる</button>
+        <br><br>
+        <div class="alert alert-primary" role="alert">
+            <p id="password" onclick="copyPassword(this)" class="password-item"></p>
+        </div>
+        <div class="alert alert-success" role="alert">
+            <p id="message" class="message"></p>
+            <p id="copy-message" class="copy-message"></p>
 
+        </div>
+        <div class="history">
+            <p class="lead">これまでつくったもの（新しい順）</p>
+             注意）リロードすると履歴は消えます
+            <div class="alert alert-dark" role="alert">
+                <ul id="history"></ul>
+            </div>
+        </div>
+
+    </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // 初期画面がロードされたときに実行される処理
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = '構成文字はアルファベット大文字・小文字と数字です';
+        });
+
         function generatePassword() {
+        // つくるボタンがクリックさえrたときに実行される処理
             const length = document.getElementById('length').value;
             const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             let password = "";
@@ -60,10 +75,12 @@
             const passwordElement = document.getElementById('password');
             passwordElement.textContent = password;
             addToHistory(password);
-            document.getElementById('copy-message').textContent = ""; // Clear copy message
+            document.getElementById('copy-message').textContent = " "; // Clear copy message
+            document.getElementById('message').textContent = "構成文字はアルファベット大文字・小文字と数字です"; 
         }
 
         function addToHistory(password) {
+        // 作成履歴を画面表示するために実行される処理
             const historyList = document.getElementById('history');
             const listItem = document.createElement('li');
             listItem.textContent = password;
@@ -74,8 +91,10 @@
 
         function copyPassword(element) {
             const password = element.textContent;
+        // パスワードを選択してクリックしたときに実行される処理
             navigator.clipboard.writeText(password).then(() => {
-                document.getElementById('copy-message').textContent = "パスワードがコピーされました！";
+                document.getElementById('copy-message').textContent = "パスワード「 "+password+" 」をコピーしました！";
+                document.getElementById('message').textContent = " "; //初期表示メッセージをクリア
             }).catch(err => {
                 console.error('Failed to copy: ', err);
             });
