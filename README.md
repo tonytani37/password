@@ -4,4 +4,4 @@
 
 そんなのをgithub Pagesで公開中
 
-[パスワードが作れる] (https://tonytani37.github.io/password/)
+パスワードが作れよ https://tonytani37.github.io/password/
